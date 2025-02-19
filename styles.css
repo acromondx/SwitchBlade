@@ -1,24 +1,33 @@
 body {
   width: 300px;
-  padding: 15px;
+  padding: 0;
+  margin: 0;
   background-color: #f8f9fa;
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 #extension-list {
   margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .extension-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
-  margin: 4px 0;
+  padding: 10px;
   background-color: white;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 1px solid #e0e0e0;
   gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.extension-item:hover {
+  border-color: #0066cc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .extension-info {
@@ -40,8 +49,8 @@ body {
 .switch {
   position: relative;
   display: inline-block;
-  width: 44px;
-  height: 24px;
+  width: 36px;
+  height: 20px;
   flex-shrink: 0;
 }
 
@@ -60,16 +69,16 @@ body {
   bottom: 0;
   background-color: #ccc;
   transition: 0.3s;
-  border-radius: 24px;
+  border-radius: 20px;
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
   background-color: white;
   transition: 0.3s;
   border-radius: 50%;
@@ -80,7 +89,7 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(20px);
+  transform: translateX(16px);
 }
 
 .button-container {
@@ -94,11 +103,11 @@ input:checked + .slider:before {
   padding: 10px;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  transition: background-color 0.2s ease;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 #enable-all {
@@ -118,22 +127,35 @@ input:checked + .slider:before {
 }
 
 .extension-name {
+  font-size: 13px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-right: 0;
+  color: #333;
 }
 
 .site-info {
   background-color: #0066cc;
   color: white;
-  padding: 10px;
-  margin: -15px -15px 15px -15px;
-  text-align: center;
-  font-weight: bold;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   border-bottom: 1px solid #0052a3;
+}
+
+.site-favicon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 #current-site {
   word-break: break-all;
+  font-size: 14px;
+  flex: 1;
+}
+
+.content {
+  padding: 15px;
 }

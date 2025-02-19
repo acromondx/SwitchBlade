@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Site-specific Extension Disabler",
+  "name": "SwitchBlade",
   "version": "1.0",
   "description": "Disable selected extensions on localhost only.",
   "permissions": [

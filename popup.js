@@ -27,6 +27,10 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const url = new URL(tabs[0].url);
     currentHostname = url.hostname;
     document.getElementById("current-site").textContent = currentHostname;
+
+     const faviconUrl = `https://www.google.com/s2/favicons?domain=${currentHostname}&sz=16`;
+    const faviconImg = document.getElementById("site-favicon");
+    faviconImg.src = faviconUrl;
   }
 });
 

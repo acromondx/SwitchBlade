@@ -6,13 +6,16 @@
   </head>
   <body>
     <div class="site-info">
+      <img id="site-favicon" class="site-favicon" src="" alt="Site icon" />
       <span id="current-site">Loading...</span>
     </div>
-    <div class="button-container">
-      <button id="enable-all" class="action-button">Enable All</button>
-      <button id="disable-all" class="action-button">Disable All</button>
+    <div class="content">
+      <div class="button-container">
+        <button id="enable-all" class="action-button">Enable All</button>
+        <button id="disable-all" class="action-button">Disable All</button>
+      </div>
+      <div id="extension-list"></div>
     </div>
-    <div id="extension-list"></div>
     <script src="popup.js"></script>
   </body>
 </html>
