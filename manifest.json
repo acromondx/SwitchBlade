@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Site-specific Extension Disabler",
+  "version": "1.0",
+  "description": "Disable selected extensions on localhost only.",
+  "permissions": [
+    "management",
+    "declarativeContent",
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
