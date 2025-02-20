@@ -183,7 +183,7 @@ document.getElementById("disable-all").addEventListener("click", () => {
   });
 });
 
- const menuButton = document.getElementById("menu-button");
+const menuButton = document.getElementById("menu-button");
 const menuDropdown = document.getElementById("menu-dropdown");
 
 menuButton.addEventListener("click", (e) => {
@@ -191,11 +191,11 @@ menuButton.addEventListener("click", (e) => {
   menuDropdown.classList.toggle("hidden");
 });
 
- document.addEventListener("click", () => {
+document.addEventListener("click", () => {
   menuDropdown.classList.add("hidden");
 });
 
- document.getElementById("reset-button").addEventListener("click", () => {
+document.getElementById("reset-button").addEventListener("click", () => {
   chrome.storage.local.set({ siteDisabledExtensions: {} }, () => {
     chrome.management.getAll((extensions) => {
       extensions.forEach((ext) => {
@@ -203,7 +203,63 @@ menuButton.addEventListener("click", (e) => {
           chrome.management.setEnabled(ext.id, true);
         }
       });
-       window.location.reload();
+      window.location.reload();
     });
   });
 });
+
+const themeButton = document.getElementById("theme-button");
+const themeDialog = document.getElementById("theme-dialog");
+const themeOptions = document.querySelectorAll(".theme-option");
+
+themeButton.addEventListener("click", () => {
+  menuDropdown.classList.add("hidden");
+  themeDialog.showModal();
+
+  chrome.storage.local.get("theme", ({ theme = "system" }) => {
+    themeOptions.forEach((option) => {
+      option.classList.toggle("active", option.dataset.theme === theme);
+    });
+  });
+});
+
+themeOptions.forEach((button) => {
+  button.addEventListener("click", () => {
+    const theme = button.dataset.theme;
+    setTheme(theme);
+    chrome.storage.local.set({ theme });
+    themeDialog.close();
+  });
+});
+
+themeDialog.addEventListener("click", (e) => {
+  if (e.target === themeDialog) {
+    themeDialog.close();
+  }
+});
+
+function setTheme(theme) {
+  if (theme === "system") {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  } else {
+    document.documentElement.setAttribute("data-theme", theme);
+  }
+}
+
+chrome.storage.local.get("theme", ({ theme }) => {
+  setTheme(theme || "system");
+});
+
+window
+  .matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener("change", () => {
+    chrome.storage.local.get("theme", ({ theme }) => {
+      if (theme === "system") {
+        setTheme("system");
+      }
+    });
+  });

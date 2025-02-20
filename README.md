@@ -2,7 +2,7 @@
 
 SwitchBlade is a powerful Chrome extension that gives you granular control over which extensions run on specific websites. With a clean and intuitive interface, you can easily manage your extensions on a per-site basis.
 
-![SwitchBlade Screenshot](screenshots/switchblade.png)
+![SwitchBlade Screenshot](images/switchblade.png)
 
 ## Features
 

@@ -17,6 +17,11 @@
             <img src="svgs/restore.svg" alt="Reset" class="icon" />
             Reset Extension
           </button>
+          <button class="menu-item" id="theme-button">
+            <img src="svgs/palette.svg" alt="Theme" class="icon" />
+            Theme
+          </button>
+          <div class="menu-separator"></div>
           <a href="https://acromondx.com/" target="_blank" class="menu-item">
             About
           </a>
@@ -31,5 +36,17 @@
       <div id="extension-list"></div>
     </div>
     <script src="popup.js"></script>
+
+    <!-- Add theme dialog -->
+    <dialog id="theme-dialog" class="theme-dialog">
+      <div class="dialog-content">
+        <h3>Choose Theme</h3>
+        <div class="theme-options">
+          <button class="theme-option" data-theme="system">System</button>
+          <button class="theme-option" data-theme="light">Light</button>
+          <button class="theme-option" data-theme="dark">Dark</button>
+        </div>
+      </div>
+    </dialog>
   </body>
 </html>
