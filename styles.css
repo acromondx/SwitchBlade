@@ -6,11 +6,35 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff4500;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff5722;
+}
+
 #extension-list {
   margin: 10px 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 5px; /* Add padding for scrollbar */
 }
 
 .extension-item {
@@ -26,7 +50,7 @@ body {
 }
 
 .extension-item:hover {
-  border-color: #0066cc;
+  border-color: #4c4c4c;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -85,7 +109,7 @@ body {
 }
 
 input:checked + .slider {
-  background-color: #0066cc;
+  background-color: #ff4500;
 }
 
 input:checked + .slider:before {
@@ -111,11 +135,11 @@ input:checked + .slider:before {
 }
 
 #enable-all {
-  background-color: #0066cc;
+  background-color: #ff4500;
 }
 
 #enable-all:hover {
-  background-color: #0052a3;
+  background-color: #ff4500;
 }
 
 #disable-all {
@@ -135,13 +159,13 @@ input:checked + .slider:before {
 }
 
 .site-info {
-  background-color: #0066cc;
+  background-color: #ff4500;
   color: white;
   padding: 15px;
   display: flex;
   align-items: center;
   gap: 10px;
-  border-bottom: 1px solid #0052a3;
+  border-bottom: 1px solid #ff4500;
 }
 
 .site-favicon {

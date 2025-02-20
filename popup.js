@@ -28,7 +28,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     currentHostname = url.hostname;
     document.getElementById("current-site").textContent = currentHostname;
 
-     const faviconUrl = `https://www.google.com/s2/favicons?domain=${currentHostname}&sz=16`;
+    const faviconUrl = `https://www.google.com/s2/favicons?domain=${currentHostname}&sz=16`;
     const faviconImg = document.getElementById("site-favicon");
     faviconImg.src = faviconUrl;
   }
@@ -41,68 +41,70 @@ chrome.management.getAll((extensions) => {
     const siteDisabledExtensions = data.siteDisabledExtensions || {};
     const currentSiteDisabled = siteDisabledExtensions[currentHostname] || {};
 
-    extensions.forEach((ext) => {
-      if (canModifyExtension(ext)) {
-        const div = document.createElement("div");
-        div.className = "extension-item";
+    const sortedExtensions = extensions
+      .filter((ext) => canModifyExtension(ext))
+      .sort((a, b) => a.name.localeCompare(b.name));
 
-        const infoDiv = document.createElement("div");
-        infoDiv.className = "extension-info";
+    sortedExtensions.forEach((ext) => {
+      const div = document.createElement("div");
+      div.className = "extension-item";
 
-        const icon = document.createElement("img");
-        icon.className = "extension-icon";
-        const iconUrl = ext.icons ? ext.icons[ext.icons.length - 1].url : "";
-        icon.src = iconUrl;
-        icon.alt = `${ext.name} icon`;
+      const infoDiv = document.createElement("div");
+      infoDiv.className = "extension-info";
 
-        const nameSpan = document.createElement("span");
-        nameSpan.className = "extension-name";
-        nameSpan.innerText = ext.name;
+      const icon = document.createElement("img");
+      icon.className = "extension-icon";
+      const iconUrl = ext.icons ? ext.icons[ext.icons.length - 1].url : "";
+      icon.src = iconUrl;
+      icon.alt = `${ext.name} icon`;
 
-        const label = document.createElement("label");
-        label.className = "switch";
+      const nameSpan = document.createElement("span");
+      nameSpan.className = "extension-name";
+      nameSpan.innerText = ext.name;
 
-        const input = document.createElement("input");
-        input.type = "checkbox";
-        input.checked = !currentSiteDisabled[ext.id];
-        input.dataset.id = ext.id;
+      const label = document.createElement("label");
+      label.className = "switch";
 
-        const slider = document.createElement("span");
-        slider.className = "slider";
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = !currentSiteDisabled[ext.id];
+      input.dataset.id = ext.id;
 
-        label.appendChild(input);
-        label.appendChild(slider);
+      const slider = document.createElement("span");
+      slider.className = "slider";
 
-        infoDiv.appendChild(icon);
-        infoDiv.appendChild(nameSpan);
-        div.appendChild(infoDiv);
-        div.appendChild(label);
-        listDiv.appendChild(div);
+      label.appendChild(input);
+      label.appendChild(slider);
 
-        input.addEventListener("change", (e) => {
-          const newDisabledState = !e.target.checked;
-          chrome.storage.local.get("siteDisabledExtensions", (data) => {
-            const siteDisabledExtensions = data.siteDisabledExtensions || {};
-            const currentSiteDisabled =
-              siteDisabledExtensions[currentHostname] || {};
+      infoDiv.appendChild(icon);
+      infoDiv.appendChild(nameSpan);
+      div.appendChild(infoDiv);
+      div.appendChild(label);
+      listDiv.appendChild(div);
 
-            const updatedSiteDisabled = {
-              ...siteDisabledExtensions,
-              [currentHostname]: {
-                ...currentSiteDisabled,
-                [ext.id]: newDisabledState,
-              },
-            };
+      input.addEventListener("change", (e) => {
+        const newDisabledState = !e.target.checked;
+        chrome.storage.local.get("siteDisabledExtensions", (data) => {
+          const siteDisabledExtensions = data.siteDisabledExtensions || {};
+          const currentSiteDisabled =
+            siteDisabledExtensions[currentHostname] || {};
 
-            chrome.storage.local.set(
-              { siteDisabledExtensions: updatedSiteDisabled },
-              () => {
-                toggleExtension(ext.id, !newDisabledState);
-              }
-            );
-          });
+          const updatedSiteDisabled = {
+            ...siteDisabledExtensions,
+            [currentHostname]: {
+              ...currentSiteDisabled,
+              [ext.id]: newDisabledState,
+            },
+          };
+
+          chrome.storage.local.set(
+            { siteDisabledExtensions: updatedSiteDisabled },
+            () => {
+              toggleExtension(ext.id, !newDisabledState);
+            }
+          );
         });
-      }
+      });
     });
   });
 });
