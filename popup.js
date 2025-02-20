@@ -34,6 +34,27 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
   }
 });
 
+async function updateBadge() {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tab?.url) {
+    const hostname = new URL(tab.url).hostname;
+    const { siteDisabledExtensions } = await chrome.storage.local.get(
+      "siteDisabledExtensions"
+    );
+
+    const hasDisabledExtensions =
+      siteDisabledExtensions[hostname] &&
+      Object.values(siteDisabledExtensions[hostname]).some(
+        (disabled) => disabled
+      );
+
+    chrome.action.setBadgeBackgroundColor({
+      color: hasDisabledExtensions ? "#ff4500" : "#4CAF50",
+    });
+    chrome.action.setBadgeText({ text: hasDisabledExtensions ? "ON" : "" });
+  }
+}
+
 chrome.management.getAll((extensions) => {
   const listDiv = document.getElementById("extension-list");
 
@@ -101,6 +122,7 @@ chrome.management.getAll((extensions) => {
             { siteDisabledExtensions: updatedSiteDisabled },
             () => {
               toggleExtension(ext.id, !newDisabledState);
+              updateBadge();
             }
           );
         });
@@ -124,6 +146,7 @@ document.getElementById("enable-all").addEventListener("click", () => {
       });
       const switches = document.querySelectorAll('input[type="checkbox"]');
       switches.forEach((s) => (s.checked = true));
+      updateBadge();
     });
   });
 });
@@ -153,8 +176,34 @@ document.getElementById("disable-all").addEventListener("click", () => {
           });
           const switches = document.querySelectorAll('input[type="checkbox"]');
           switches.forEach((s) => (s.checked = false));
+          updateBadge();
         }
       );
+    });
+  });
+});
+
+ const menuButton = document.getElementById("menu-button");
+const menuDropdown = document.getElementById("menu-dropdown");
+
+menuButton.addEventListener("click", (e) => {
+  e.stopPropagation();
+  menuDropdown.classList.toggle("hidden");
+});
+
+ document.addEventListener("click", () => {
+  menuDropdown.classList.add("hidden");
+});
+
+ document.getElementById("reset-button").addEventListener("click", () => {
+  chrome.storage.local.set({ siteDisabledExtensions: {} }, () => {
+    chrome.management.getAll((extensions) => {
+      extensions.forEach((ext) => {
+        if (canModifyExtension(ext)) {
+          chrome.management.setEnabled(ext.id, true);
+        }
+      });
+       window.location.reload();
     });
   });
 });
